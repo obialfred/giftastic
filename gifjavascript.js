@@ -19,7 +19,7 @@ function populateButtons(searchArray, classToAdd, areaToAddTo) {
 $(document).on('click', '.searchButton', function () {
     var type = $(this).data('type');
     console.log(type);
-    var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + type + '&api_keyAsPoCdGgnPFUdPW2cmfMrzsSHe9MjTmn&limit=20';
+    var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + type + '&api_key=AsPoCdGgnPFUdPW2cmfMrzsSHe9MjTmn&limit=20';
     $.ajax({
             url: queryURL,
             method: 'GET'
@@ -30,10 +30,11 @@ $(document).on('click', '.searchButton', function () {
                 var rating = response.data[i].rating;
                 var p = $('<p>').text('Rating: ' + rating);
                 var animated = response.data[i].images.fixed_height.url;
-                var still = response.data[i].images.fixed_hegiht_still.url;
+                var still = response.data[i].images.fixed_height_still.url;
                 var image = $('<img>');
                 image.attr('src', still);
                 image.attr('data-still', still);
+                image.attr('data-animated', animated);
                 image.attr('data-state', 'still');
                 image.addClass('searchImage');
                 searchDiv.append(p);
@@ -43,14 +44,16 @@ $(document).on('click', '.searchButton', function () {
         })
 })
 
-$(document).on('click', '.searchImage', function () {
-    var state = $(this).attr('data-state');
+$(document).on('click', '.search-item', function () {
+    console.log($(this).find('img'));
+    var img = $(this).find('img')
+    var state = img.attr('data-state');
     if (state == 'still') {
-        $(this).attr('src', $(this).data('animated'));
-        $(this).attr('data-state', 'animated');
+        img.attr('src', img.data('animated'));
+        img.attr('data-state', 'animated');
     } else {
-        $(this).attr('src', $(this).data('still'));
-        $(this).attr('data-state', 'still');
+        img.attr('src', img.data('still'));
+        img.attr('data-state', 'still');
     }
 })
 
